@@ -51,7 +51,7 @@ export default function ProductBuy({ slug, name, price, image, engravable, wa }:
           className="btn btn-accent min-w-0 flex-1"
           onClick={() => addToCart({ slug, name, price, image, qty, engraving: text.trim() || undefined })}
         >
-          Adaugă în coș<span className="hidden sm:inline"> · {fmt(price * qty)}</span>
+          Adaugă în coș<span className="hidden sm:inline">· {fmt(price * qty)}</span>
         </button>
       </div>
       <a href={wa} target="_blank" rel="noopener" className="btn btn-ghost mt-3 w-full">

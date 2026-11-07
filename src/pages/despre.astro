@@ -17,6 +17,14 @@ import { shop, waLink } from '../data/shop';
           <p>Așa a crescut raftul de cadouri. Alegem fiecare model pe care îl aducem, de la suporturile de sticlă pictate manual la seturile din lemn pe care le gravăm aici, la laser.</p>
           <p>Studioul e tot acolo, în spatele magazinului. Poți veni după un cadou și să pleci și cu pozele pentru pașaport.</p>
         </div>
+        <figure class="mt-10">
+          <div class="grid grid-cols-3 gap-2.5 sm:gap-3">
+            {['suport-sticla-caine-rata', 'suport-servire-panda', 'suport-sticla-cerb'].map((s, i) => (
+              <img src={`/img/orig/${s}.jpg`} alt="Raft din magazin cu cadouri decorative" width="600" height="800" loading="lazy" class={`aspect-[3/4] w-full rounded-[10px] object-cover ${i === 1 ? 'sm:translate-y-6' : ''}`} />
+            ))}
+          </div>
+          <figcaption class="mt-3 text-sm text-muted sm:mt-9">Fotografii făcute în magazin, pe rafturile noastre.</figcaption>
+        </figure>
       </div>
 
       <aside class="self-start rounded-[12px] bg-cream p-7 sm:p-9">

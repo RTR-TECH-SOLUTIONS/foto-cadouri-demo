@@ -79,15 +79,18 @@ const faq = [
   </section>
 
   <section id="rame" class="wrap mt-20 scroll-mt-6">
-    <div class="grid gap-8 rounded-[12px] bg-cream p-7 sm:p-10 lg:grid-cols-[1fr_1.2fr] lg:items-center">
-      <div>
+    <div class="grid overflow-hidden rounded-[12px] bg-cream lg:grid-cols-[1fr_1.1fr]">
+      <div class="flex flex-col justify-center p-7 sm:p-10 lg:p-12">
         <p class="eyebrow">Rame și albume</p>
         <h2 class="h-sec mt-3">Poza printată, pusă direct în ramă</h2>
+        <p class="mt-5 text-[1.04rem] leading-[1.75] text-muted">
+          Avem rame din lemn natur, albe și negre, de la 10 × 15 la 30 × 40 cm, albume cu foi kraft și rame gravate cu nume pentru botez și nuntă.
+          Printăm poza la dimensiunea ramei și o montăm cât aștepți.
+        </p>
+        <a href={waLink('Bună ziua! Aș dori să printez câteva poze și să le pun în ramă.')} target="_blank" rel="noopener" class="btn btn-ghost mt-7 self-start">Întreabă de rame pe WhatsApp</a>
       </div>
-      <p class="text-[1.04rem] leading-[1.75] text-muted">
-        Avem rame din lemn natur, albe și negre, de la 10 × 15 la 30 × 40 cm, albume cu foi kraft și rame gravate cu nume pentru botez și nuntă.
-        Printăm poza la dimensiunea ramei și o montăm cât aștepți.
-      </p>
+      <!-- TODO(real): poză cu peretele de rame din magazinul clientei (acum: rawpixel, CC0) -->
+      <img src="/img/scene/rame.webp" alt="Perete cu rame foto de diferite mărimi" width="1200" height="800" loading="lazy" class="h-full min-h-[260px] w-full object-cover" />
     </div>
   </section>
 
