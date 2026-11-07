@@ -1,0 +1,54 @@
+---
+import Logo from './Logo.astro';
+import Icon from './Icon.astro';
+import { shop } from '../data/shop';
+import { categories } from '../data/catalog';
+---
+<footer class="mt-24 bg-ink text-[#d9d0c2]">
+  <div class="wrap grid gap-10 py-16 md:grid-cols-2 lg:grid-cols-[1.3fr_1fr_1fr_1.2fr]">
+    <div>
+      <Logo light />
+      <p class="mt-4 max-w-xs text-[15px] leading-relaxed">
+        Magazin de cadouri cu studio foto în spate. Alegi cadoul de pe raft, facem poza pentru acte cât îl ambalăm.
+      </p>
+      <div class="mt-5 flex gap-3 text-sm">
+        <a href="#" class="rounded-lg border border-white/20 px-3 py-2 hover:border-white/50">Facebook</a>
+        <a href="#" class="rounded-lg border border-white/20 px-3 py-2 hover:border-white/50">Instagram</a>
+        <a href="#" class="rounded-lg border border-white/20 px-3 py-2 hover:border-white/50">TikTok</a>
+      </div>
+    </div>
+    <div>
+      <h2 class="font-serif text-lg font-bold text-white">Cadouri</h2>
+      <ul class="mt-4 grid gap-2 text-[15px]">
+        {categories.map((c) => <li><a href={`/categorie/${c.id}`} class="hover:text-white">{c.name}</a></li>)}
+        <li><a href="/personalizari" class="hover:text-white">Personalizări și gravură</a></li>
+      </ul>
+    </div>
+    <div>
+      <h2 class="font-serif text-lg font-bold text-white">Studio foto</h2>
+      <ul class="mt-4 grid gap-2 text-[15px]">
+        <li><a href="/studio-foto#acte" class="hover:text-white">Poze pentru acte</a></li>
+        <li><a href="/studio-foto#printare" class="hover:text-white">Printare fotografii</a></li>
+        <li><a href="/studio-foto#sedinte" class="hover:text-white">Ședințe foto în studio</a></li>
+        <li><a href="/studio-foto#rame" class="hover:text-white">Rame și albume</a></li>
+      </ul>
+    </div>
+    <div>
+      <h2 class="font-serif text-lg font-bold text-white">Magazinul</h2>
+      <ul class="mt-4 grid gap-3 text-[15px]">
+        <li class="flex gap-2.5"><Icon name="pin" size={18} class="mt-0.5 shrink-0 text-accent-soft" />{shop.address}, {shop.city}</li>
+        <li class="flex gap-2.5"><Icon name="phone" size={18} class="mt-0.5 shrink-0 text-accent-soft" /><a href={shop.phoneHref} class="hover:text-white">{shop.phone}</a></li>
+        <li class="flex gap-2.5">
+          <Icon name="clock" size={18} class="mt-0.5 shrink-0 text-accent-soft" />
+          <span>{shop.hours.map((h) => <span class="block">{h.days}: {h.time}</span>)}</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="border-t border-white/10">
+    <div class="wrap flex flex-col gap-3 py-6 text-sm text-[#a99f90] md:flex-row md:items-center md:justify-between">
+      <p>© {new Date().getFullYear()} {shop.name}. Toate drepturile rezervate.</p>
+      <p>Plată cu cardul, ramburs sau în magazin la ridicare · Fundal banner cabană: Shixart1985, CC BY 2.0</p>
+    </div>
+  </div>
+</footer>

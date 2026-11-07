@@ -1,0 +1,119 @@
+---
+import Icon from './Icon.astro';
+import Logo from './Logo.astro';
+import CartButton from './CartButton.tsx';
+import { shop } from '../data/shop';
+import { recipients } from '../data/catalog';
+
+interface Props {
+  active?: string;
+}
+const { active = '' } = Astro.props;
+
+const nav = [
+  { href: '/categorie/suporturi-sticle', label: 'Suporturi sticle și bar', key: 'suporturi-sticle' },
+  { href: '/categorie/seturi-lemn', label: 'Seturi din lemn', key: 'seturi-lemn' },
+  { href: '/categorie/decor-servire', label: 'Decor și servire', key: 'decor-servire' },
+  { href: '/personalizari', label: 'Personalizări', key: 'personalizari' },
+  { href: '/studio-foto', label: 'Studio foto', key: 'studio' },
+  { href: '/despre', label: 'Despre noi și contact', key: 'despre' },
+];
+---
+<header class="relative z-30 bg-white">
+  <div class="bg-ink text-[13px] text-[#e9e1d3]">
+    <div class="wrap flex h-9 items-center justify-center gap-x-6 whitespace-nowrap">
+      <span class="hidden items-center gap-1.5 md:flex"><Icon name="store" size={15} /> Magazin fizic în {shop.city}</span>
+      <span class="hidden items-center gap-1.5 sm:flex"><Icon name="clock" size={15} /> {shop.hoursShort}</span>
+      <a href={shop.phoneHref} class="flex items-center gap-1.5 font-semibold text-white hover:underline"><Icon name="phone" size={15} /> {shop.phone}</a>
+    </div>
+  </div>
+
+  <div class="wrap grid h-[84px] grid-cols-[1fr_auto] items-center gap-4 md:grid-cols-[1fr_minmax(0,520px)_1fr] md:gap-8">
+    <div class="flex items-center gap-1">
+      <button type="button" class="-ml-2 grid size-11 place-items-center rounded-lg lg:hidden" aria-label="Deschide meniul" aria-expanded="false" aria-controls="meniu-mobil" data-menu-toggle>
+        <Icon name="menu" size={24} />
+      </button>
+      <Logo />
+    </div>
+    <form action="/cadouri" class="relative hidden w-full md:block" role="search">
+      <label for="q" class="sr-only">Caută produse</label>
+      <input id="q" name="q" type="search" placeholder="Ce cadou cauți? (ex. vânător, lemn, vin)" class="field h-12 pr-12 text-[15px]" />
+      <button class="absolute right-1 top-1 grid size-10 place-items-center rounded-lg text-ink hover:bg-cream" aria-label="Caută"><Icon name="search" /></button>
+    </form>
+    <div class="flex items-center justify-end gap-1">
+      <a href={shop.phoneHref} class="mr-1 hidden items-center gap-2 rounded-lg px-2 py-2 text-sm leading-tight xl:flex">
+        <span class="grid size-9 place-items-center rounded-full bg-cream text-accent"><Icon name="phone" size={18} /></span>
+        <span><span class="block text-xs text-muted">Comenzi telefonice</span><b class="text-ink">{shop.phone}</b></span>
+      </a>
+      <a href="/cont" class={`grid size-11 place-items-center rounded-lg hover:bg-cream ${active === 'cont' ? 'text-accent' : ''}`} aria-label="Contul meu"><Icon name="user" size={23} /></a>
+      <CartButton client:load />
+    </div>
+  </div>
+
+  <nav class="hidden border-y border-line bg-cream-2 lg:block" aria-label="Meniu principal">
+    <ul class="wrap flex h-12 items-center justify-center gap-8 text-[15px] font-semibold text-ink">
+      <li class="group relative h-full">
+        <a href="/cadouri" class={`flex h-full items-center gap-1 ${active === 'cadouri' ? 'text-accent' : 'hover:text-accent'}`}>Cadouri <Icon name="chevron" size={16} /></a>
+        <div class="invisible absolute left-0 top-full w-72 translate-y-1 rounded-b-[10px] border border-line bg-white p-2 opacity-0 shadow-[0_18px_40px_-20px_rgb(44_36_25/0.35)] transition duration-150 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
+          {recipients.map((r) => (
+            <a href={`/cadouri?for=${r.id}`} class="block rounded-lg px-3 py-2.5 font-medium hover:bg-cream">{r.name}</a>
+          ))}
+          <a href="/cadouri" class="mt-1 block rounded-lg border-t border-line px-3 py-2.5 text-accent hover:bg-cream">Toate cadourile</a>
+        </div>
+      </li>
+      {nav.map((n) => (
+        <li><a href={n.href} class={active === n.key ? 'text-accent' : 'hover:text-accent'}>{n.label}</a></li>
+      ))}
+    </ul>
+  </nav>
+
+  <div class="border-b border-line bg-[#f2f0ec]">
+    <p class="wrap flex h-11 items-center justify-center gap-x-6 overflow-hidden whitespace-nowrap text-[14px] text-ink">
+      <span class="flex items-center gap-2"><Icon name="store" size={17} class="text-accent" /> Ridicare din magazin, gratuit</span>
+      <span class="hidden items-center gap-2 sm:flex"><Icon name="truck" size={17} class="text-accent" /> Curier în 24-48 h, gratuit peste {shop.freeShipping} lei</span>
+      <span class="hidden items-center gap-2 md:flex"><Icon name="pen" size={17} class="text-accent" /> Gravăm numele gratuit pe seturile din lemn</span>
+    </p>
+  </div>
+
+  <div id="meniu-mobil" class="fixed inset-0 z-50 hidden lg:hidden" data-menu>
+    <div class="absolute inset-0 bg-black/40" data-menu-close></div>
+    <div class="absolute inset-y-0 left-0 flex w-[86%] max-w-sm flex-col overflow-y-auto bg-white p-5">
+      <div class="mb-4 flex items-center justify-between">
+        <Logo />
+        <button type="button" class="grid size-11 place-items-center rounded-lg" aria-label="Închide meniul" data-menu-close>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg>
+        </button>
+      </div>
+      <form action="/cadouri" role="search" class="mb-4">
+        <label for="qm" class="sr-only">Caută produse</label>
+        <input id="qm" name="q" type="search" placeholder="Ce cadou cauți?" class="field" />
+      </form>
+      <p class="mt-2 text-sm text-muted">Cadouri</p>
+      <ul class="mb-3 mt-1 grid gap-0.5 font-semibold">
+        {recipients.map((r) => <li><a class="block rounded-lg py-2.5" href={`/cadouri?for=${r.id}`}>{r.name}</a></li>)}
+      </ul>
+      <p class="text-sm text-muted">Magazin</p>
+      <ul class="mt-1 grid gap-0.5 font-semibold">
+        <li><a class="block py-2.5" href="/cadouri">Toate produsele</a></li>
+        {nav.map((n) => <li><a class="block py-2.5" href={n.href}>{n.label}</a></li>)}
+      </ul>
+      <a href={shop.phoneHref} class="btn btn-ghost mt-auto">
+        <Icon name="phone" size={18} /> {shop.phone}
+      </a>
+    </div>
+  </div>
+</header>
+
+<script>
+  const menu = document.querySelector<HTMLElement>('[data-menu]');
+  const toggle = document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
+  const setOpen = (open: boolean) => {
+    if (!menu || !toggle) return;
+    menu.classList.toggle('hidden', !open);
+    toggle.setAttribute('aria-expanded', String(open));
+    document.documentElement.style.overflow = open ? 'hidden' : '';
+  };
+  toggle?.addEventListener('click', () => setOpen(true));
+  document.querySelectorAll('[data-menu-close]').forEach((el) => el.addEventListener('click', () => setOpen(false)));
+  document.addEventListener('keydown', (e) => e.key === 'Escape' && setOpen(false));
+</script>

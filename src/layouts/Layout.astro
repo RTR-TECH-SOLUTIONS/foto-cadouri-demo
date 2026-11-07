@@ -1,0 +1,71 @@
+---
+import '@fontsource-variable/playfair-display';
+import '@fontsource-variable/dm-sans';
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Icon from '../components/Icon.astro';
+import { shop, waLink } from '../data/shop';
+
+interface Props {
+  title?: string;
+  active?: string;
+  bare?: boolean;
+}
+const { title, active = '', bare = false } = Astro.props;
+const fullTitle = title ? `${title} | ${shop.name}` : `${shop.name}, ${shop.tagline}`;
+---
+<!doctype html>
+<html lang="ro">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content="Cadouri decorative, seturi din lemn gravate, suporturi de sticlă și studio foto: poze acte, printare, ședințe foto." />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta name="robots" content="noindex, nofollow" />
+  </head>
+  <body class="min-h-dvh">
+    {!bare && <Header active={active} />}
+    <main id="continut">
+      <slot />
+    </main>
+    {!bare && <Footer />}
+    {!bare && (
+      <a
+        href={waLink('Bună ziua! Aș dori câteva informații.')}
+        target="_blank"
+        rel="noopener"
+        class="fixed bottom-5 right-5 z-20 grid size-14 place-items-center rounded-full bg-wa text-white shadow-[0_6px_20px_-6px_rgb(0_0_0/0.4)] transition-transform duration-200 hover:scale-105"
+        aria-label="Scrie-ne pe WhatsApp"
+      >
+        <Icon name="wa" size={30} />
+      </a>
+    )}
+    <script>
+      import { addToCart } from '../lib/cart';
+      document.addEventListener('click', (e) => {
+        const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-add]');
+        if (!btn) return;
+        e.preventDefault();
+        addToCart({
+          slug: btn.dataset.slug!,
+          name: btn.dataset.name!,
+          price: Number(btn.dataset.price),
+          image: btn.dataset.image!,
+        });
+      });
+      const io = new IntersectionObserver(
+        (entries) =>
+          entries.forEach((en) => {
+            if (en.isIntersecting) {
+              en.target.classList.add('is-in');
+              io.unobserve(en.target);
+            }
+          }),
+        { rootMargin: '0px 0px -8% 0px' },
+      );
+      document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+    </script>
+  </body>
+</html>

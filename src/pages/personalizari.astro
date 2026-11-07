@@ -1,0 +1,44 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Icon from '../components/Icon.astro';
+import ProductCard from '../components/ProductCard.astro';
+import { products } from '../data/catalog';
+import { waLink } from '../data/shop';
+
+const engravable = products.filter((p) => p.engravable);
+const options = [
+  { title: 'Nume sau mesaj gravat pe lemn', text: 'Pe seturile din lemn: bărci, mașinuțe, camioane. Până la 28 de caractere, gata în aceeași zi.', price: 'gratuit' },
+  { title: 'Număr de înmatriculare personalizat', text: 'Pe mașinuța retro: numărul lui, cu județul și literele alese de tine.', price: 'gratuit' },
+  { title: 'Poză gravată pe ramă sau tăviță', text: 'Ne trimiți poza, o pregătim pentru gravură și îți trimitem proba pe WhatsApp.', price: 'de la 30 lei' },
+  { title: 'Etichetă pe cutia cadou', text: 'Numele nașilor, data botezului sau a nunții, pe capacul cutiei cu vin.', price: '10 lei' },
+];
+---
+<Layout title="Personalizări" active="personalizari">
+  <section class="wrap pt-10">
+    <nav class="text-sm text-muted" aria-label="Breadcrumb"><a href="/" class="hover:text-ink">Acasă</a> / <span class="text-ink">Personalizări</span></nav>
+    <div class="mt-6 grid gap-8 lg:grid-cols-[1.1fr_1fr] lg:items-end">
+      <h1 class="display text-[clamp(2.4rem,1.5rem+3vw,3.6rem)]">Personalizăm cadoul la noi în atelier</h1>
+      <p class="text-[1.05rem] leading-[1.75] text-muted">Gravăm la laser pe lemn și pe rame, punem poze pe obiecte și scriem etichete pentru cutiile cadou. Înainte să gravăm îți trimitem o probă, ca să știi exact cum iese.</p>
+    </div>
+  </section>
+
+  <section class="wrap mt-14">
+    <ul class="divide-y divide-line border-y border-line">
+      {options.map((o) => (
+        <li class="grid gap-2 py-6 md:grid-cols-[1fr_1.4fr_auto] md:items-baseline md:gap-10">
+          <h2 class="font-serif text-[1.35rem] font-bold text-ink">{o.title}</h2>
+          <p class="text-[15.5px] leading-[1.7] text-muted">{o.text}</p>
+          <b class="whitespace-nowrap text-ink">{o.price}</b>
+        </li>
+      ))}
+    </ul>
+    <a href={waLink('Bună ziua! Aș dori un cadou personalizat.')} target="_blank" rel="noopener" class="btn btn-wa mt-8"><Icon name="wa" size={20} /> Trimite-ne textul sau poza pe WhatsApp</a>
+  </section>
+
+  <section class="wrap mt-20" aria-labelledby="gr">
+    <h2 id="gr" class="h-sec">Se pot grava acum</h2>
+    <div class="mt-8 grid grid-cols-2 gap-x-4 gap-y-8 md:grid-cols-3">
+      {engravable.map((p) => <ProductCard p={p} />)}
+    </div>
+  </section>
+</Layout>

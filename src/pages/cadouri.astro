@@ -1,0 +1,16 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ProductsBrowser from '../components/ProductsBrowser.tsx';
+---
+<Layout title="Cadouri" active="cadouri">
+  <section class="wrap pt-10">
+    <nav class="text-sm text-muted" aria-label="Breadcrumb"><a href="/" class="hover:text-ink">Acasă</a> / <span class="text-ink">Cadouri</span></nav>
+    <div class="mt-4 flex flex-wrap items-end justify-between gap-4">
+      <h1 class="h-sec">Cadouri din magazin</h1>
+      <p class="max-w-md text-[15px] text-muted">Tot ce vezi aici e pe raft la noi. Comanzi online și îl ridici din magazin sau ți-l trimitem prin curier.</p>
+    </div>
+  </section>
+  <section class="wrap mt-10">
+    <ProductsBrowser client:load />
+  </section>
+</Layout>

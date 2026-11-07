@@ -1,0 +1,108 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Icon from '../components/Icon.astro';
+import { studioPrices } from '../data/content';
+import { shop, waLink } from '../data/shop';
+
+const groups = [
+  {
+    id: 'acte',
+    title: 'Poze pentru acte',
+    text: 'Buletin, pașaport, permis, viză, legitimații. Știm dimensiunile și fundalul cerut pentru fiecare act și pentru fiecare ambasadă. Le refacem până ies bine, fără cost în plus.',
+    items: ['acte', 'viza'],
+  },
+  {
+    id: 'printare',
+    title: 'Printare fotografii',
+    text: 'Ne trimiți pozele pe WhatsApp sau vii cu telefonul ori stick-ul. Printăm pe hârtie lucioasă sau mată, de la 10 × 15 până la 40 × 60 cm, și le punem direct în ramă dacă vrei.',
+    items: ['print', 'print-mare'],
+  },
+  {
+    id: 'sedinte',
+    title: 'Ședințe foto și evenimente',
+    text: 'Ședințe scurte în studio pentru familie, copii sau cuplu, cu fundal alb sau crem. Venim și la botez sau la cununia civilă.',
+    items: ['sedinta', 'eveniment'],
+  },
+  {
+    id: 'restaurare',
+    title: 'Restaurare și transfer',
+    text: 'Scanăm și retușăm pozele vechi ale bunicilor, scoatem zgârieturile și culoarea ștearsă. Mutăm casetele video vechi pe stick.',
+    items: ['restaurare', 'casete'],
+  },
+];
+const price = (id: string) => studioPrices.find((s) => s.id === id)!;
+
+const faq = [
+  { q: 'Trebuie să mă programez pentru poze de buletin?', a: 'Nu. Pentru poze de acte vii oricând în program. Pentru ședințele foto te rugăm să ne scrii înainte, ca să pregătim studioul.' },
+  { q: 'Pot face poze de pașaport pentru un bebeluș?', a: 'Da. Avem un scaun special și răbdare. Durează puțin mai mult, dar ies bine.' },
+  { q: 'Cum vă trimit pozele pentru printat?', a: `Pe WhatsApp la ${shop.phone}, pe e-mail sau aduci telefonul ori stick-ul în magazin. Îți spunem când sunt gata.` },
+  { q: 'Pot pune poza într-o ramă din magazin?', a: 'Da, printăm la dimensiunea ramei și o montăm pe loc. Avem rame din lemn, albume și rame gravate.' },
+];
+---
+<Layout title="Studio foto" active="studio">
+  <section class="wrap pt-10">
+    <nav class="text-sm text-muted" aria-label="Breadcrumb"><a href="/" class="hover:text-ink">Acasă</a> / <span class="text-ink">Studio foto</span></nav>
+    <div class="mt-6 grid gap-10 lg:grid-cols-[1.1fr_1fr] lg:items-end">
+      <div>
+        <p class="eyebrow">În spatele magazinului</p>
+        <h1 class="display mt-4 text-[clamp(2.4rem,1.5rem+3vw,3.6rem)]">Studio foto: poze pentru acte, printare și ședințe</h1>
+      </div>
+      <div>
+        <p class="text-[1.05rem] leading-[1.75] text-muted">Pozele pentru acte le facem fără programare și sunt gata în 10 minute. Pentru ședințe foto și evenimente, scrie-ne pe WhatsApp și stabilim o oră.</p>
+        <div class="mt-6 flex flex-wrap gap-3">
+          <a href={waLink('Bună ziua! Aș dori o programare la studio foto.')} target="_blank" rel="noopener" class="btn btn-wa"><Icon name="wa" size={20} /> Programează pe WhatsApp</a>
+          <a href={shop.phoneHref} class="btn btn-ghost"><Icon name="phone" size={18} /> {shop.phone}</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap mt-16 grid gap-6 md:grid-cols-2">
+    {groups.map((g, i) => (
+      <article id={g.id} class={`reveal scroll-mt-6 rounded-[12px] p-7 sm:p-9 ${i === 0 ? 'bg-ink text-[#e6ddcf]' : 'border border-line bg-cream-2'}`}>
+        <h2 class={`font-serif text-[1.7rem] font-extrabold leading-tight ${i === 0 ? 'text-white' : 'text-ink'}`}>{g.title}</h2>
+        <p class={`mt-3 text-[15.5px] leading-[1.75] ${i === 0 ? '' : 'text-muted'}`}>{g.text}</p>
+        <ul class={`mt-6 border-t pt-2 ${i === 0 ? 'border-white/15' : 'border-line'}`}>
+          {g.items.map((id) => {
+            const s = price(id);
+            return (
+              <li class="flex items-baseline gap-3 py-2.5 text-[15px]">
+                <span><b class={i === 0 ? 'text-white' : 'text-ink'}>{s.name}</b><span class={`block text-[13px] ${i === 0 ? 'text-[#b9ae9d]' : 'text-muted'}`}>{s.note}</span></span>
+                <span class="price-leader" aria-hidden="true"></span>
+                <b class={`whitespace-nowrap ${i === 0 ? 'text-white' : 'text-ink'}`}>{s.price}</b>
+              </li>
+            );
+          })}
+        </ul>
+      </article>
+    ))}
+  </section>
+
+  <section id="rame" class="wrap mt-20 scroll-mt-6">
+    <div class="grid gap-8 rounded-[12px] bg-cream p-7 sm:p-10 lg:grid-cols-[1fr_1.2fr] lg:items-center">
+      <div>
+        <p class="eyebrow">Rame și albume</p>
+        <h2 class="h-sec mt-3">Poza printată, pusă direct în ramă</h2>
+      </div>
+      <p class="text-[1.04rem] leading-[1.75] text-muted">
+        Avem rame din lemn natur, albe și negre, de la 10 × 15 la 30 × 40 cm, albume cu foi kraft și rame gravate cu nume pentru botez și nuntă.
+        Printăm poza la dimensiunea ramei și o montăm cât aștepți.
+      </p>
+    </div>
+  </section>
+
+  <section class="wrap mt-20 grid gap-10 lg:grid-cols-[1fr_1.4fr]" aria-labelledby="faq">
+    <div>
+      <p class="eyebrow">Întrebări frecvente</p>
+      <h2 id="faq" class="h-sec mt-3">Ce ne întreabă clienții</h2>
+    </div>
+    <div class="divide-y divide-line border-y border-line">
+      {faq.map((f) => (
+        <details class="group py-5">
+          <summary class="flex cursor-pointer list-none items-center justify-between gap-4 text-[1.06rem] font-semibold text-ink">{f.q}<Icon name="chevron" class="shrink-0 transition-transform group-open:rotate-180" /></summary>
+          <p class="mt-3 text-[15px] leading-[1.75] text-muted">{f.a}</p>
+        </details>
+      ))}
+    </div>
+  </section>
+</Layout>

@@ -1,0 +1,19 @@
+---
+interface Props {
+  class?: string;
+  light?: boolean;
+}
+const { class: cls = '', light = false } = Astro.props;
+---
+<a href="/" class={`group inline-flex items-center gap-2.5 ${cls}`} aria-label="Foto & Cadouri, pagina principală">
+  <svg width="34" height="34" viewBox="0 0 34 34" fill="none" aria-hidden="true" class={light ? 'text-[#d9c29a]' : 'text-accent-soft'}>
+    <rect x="5" y="13" width="24" height="16" rx="1.5" stroke="currentColor" stroke-width="1.4" />
+    <rect x="3.5" y="9" width="27" height="5" rx="1" stroke="currentColor" stroke-width="1.4" />
+    <path d="M17 9v20" stroke="currentColor" stroke-width="1.4" />
+    <circle cx="17" cy="21" r="3.6" stroke="currentColor" stroke-width="1.4" fill={light ? '#2c2419' : '#fff'} />
+    <path d="M17 9s-2-4.6-4.8-4.2C9.6 5.2 10.6 9 17 9Zm0 0s2-4.6 4.8-4.2C24.4 5.2 23.4 9 17 9Z" stroke="currentColor" stroke-width="1.4" />
+  </svg>
+  <span class={`whitespace-nowrap font-serif text-[1.25rem] font-extrabold leading-none tracking-tight sm:text-[1.45rem] ${light ? 'text-white' : 'text-ink'}`}>
+    Foto <span class="font-semibold italic text-accent-soft">&amp;</span> Cadouri
+  </span>
+</a>

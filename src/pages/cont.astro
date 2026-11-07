@@ -1,0 +1,12 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Account from '../components/Account.tsx';
+---
+<Layout title="Contul meu" active="cont">
+  <section class="wrap pt-10">
+    <nav class="text-sm text-muted" aria-label="Breadcrumb"><a href="/" class="hover:text-ink">Acasă</a> / <span class="text-ink">Contul meu</span></nav>
+  </section>
+  <section class="wrap mt-8">
+    <Account client:load />
+  </section>
+</Layout>

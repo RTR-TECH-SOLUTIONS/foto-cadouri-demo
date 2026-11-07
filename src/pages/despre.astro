@@ -1,0 +1,52 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Icon from '../components/Icon.astro';
+import ShopMap from '../components/ShopMap.astro';
+import { shop, waLink } from '../data/shop';
+---
+<Layout title="Despre noi și contact" active="despre">
+  <section class="wrap pt-10">
+    <nav class="text-sm text-muted" aria-label="Breadcrumb"><a href="/" class="hover:text-ink">Acasă</a> / <span class="text-ink">Despre noi și contact</span></nav>
+    <div class="mt-6 grid gap-10 lg:grid-cols-[1.15fr_1fr] lg:gap-16">
+      <div>
+        <p class="eyebrow">Despre noi</p>
+        <h1 class="display mt-4 text-[clamp(2.4rem,1.5rem+3vw,3.6rem)]">Un magazin de cartier care a început cu un aparat foto</h1>
+        <!-- TODO(real): povestea reală a clientei, anul deschiderii, poză cu vitrina -->
+        <div class="mt-7 grid gap-5 text-[1.05rem] leading-[1.8] text-muted">
+          <p>Am deschis ca studio foto: poze pentru acte, developare, printare. Clienții veneau după poze și ne întrebau unde găsesc o ramă bună, apoi un cadou pentru botez, apoi ceva pentru tata care are deja de toate.</p>
+          <p>Așa a crescut raftul de cadouri. Alegem fiecare model pe care îl aducem, de la suporturile de sticlă pictate manual la seturile din lemn pe care le gravăm aici, la laser.</p>
+          <p>Studioul e tot acolo, în spatele magazinului. Poți veni după un cadou și să pleci și cu pozele pentru pașaport.</p>
+        </div>
+      </div>
+
+      <aside class="self-start rounded-[12px] bg-cream p-7 sm:p-9">
+        <h2 class="font-serif text-2xl font-extrabold text-ink">Contact</h2>
+        <ul class="mt-6 grid gap-5 text-[15.5px] text-ink">
+          <li class="flex gap-3"><Icon name="pin" size={21} class="mt-0.5 shrink-0 text-accent" /><span><b class="block">Adresă</b>{shop.address}, {shop.city}</span></li>
+          <li class="flex gap-3"><Icon name="phone" size={21} class="mt-0.5 shrink-0 text-accent" /><span><b class="block">Telefon și WhatsApp</b><a href={shop.phoneHref} class="hover:underline">{shop.phone}</a></span></li>
+          <li class="flex gap-3"><Icon name="clock" size={21} class="mt-0.5 shrink-0 text-accent" /><span><b class="block">Program</b>{shop.hours.map((h) => <span class="block">{h.days}: {h.time}</span>)}</span></li>
+        </ul>
+        <form class="mt-8 grid gap-3 border-t border-line pt-6" data-wa-form>
+          <h3 class="font-serif text-lg font-bold text-ink">Scrie-ne direct</h3>
+          <label class="text-sm font-semibold text-ink" for="cn">Nume</label>
+          <input id="cn" name="name" required class="field" autocomplete="name" />
+          <label class="text-sm font-semibold text-ink" for="cm">Mesaj</label>
+          <textarea id="cm" name="msg" required rows="3" class="field" placeholder="Ex. aveți suportul cu cerb în stoc?"></textarea>
+          <button class="btn btn-wa mt-2"><Icon name="wa" size={20} /> Trimite pe WhatsApp</button>
+        </form>
+      </aside>
+    </div>
+  </section>
+  <section class="wrap mt-16" aria-label="Harta magazinului">
+    <ShopMap class="min-h-[420px]" />
+  </section>
+</Layout>
+
+<script define:vars={{ wa: shop.whatsapp }}>
+  document.querySelector('[data-wa-form]')?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const f = new FormData(e.target);
+    const text = `Bună ziua! Sunt ${f.get('name')}. ${f.get('msg')}`;
+    window.open(`${wa}?text=${encodeURIComponent(text)}`, '_blank', 'noopener');
+  });
+</script>

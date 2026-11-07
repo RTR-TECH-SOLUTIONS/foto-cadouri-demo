@@ -1,0 +1,13 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Checkout from '../components/Checkout.tsx';
+---
+<Layout title="Finalizează comanda">
+  <section class="wrap pt-10">
+    <nav class="text-sm text-muted" aria-label="Breadcrumb"><a href="/" class="hover:text-ink">Acasă</a> / <a href="/cos" class="hover:text-ink">Coș</a> / <span class="text-ink">Finalizare</span></nav>
+    <h1 class="h-sec mt-4">Finalizează comanda</h1>
+  </section>
+  <section class="wrap mt-10">
+    <Checkout client:load />
+  </section>
+</Layout>

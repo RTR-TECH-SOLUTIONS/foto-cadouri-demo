@@ -1,0 +1,9 @@
+node_modules
+dist
+.astro
+.playwright-mcp
+poze-client
+_de-facut-la-proiectul-real
+CLAUDE.md
+README-DEMO.md
+.DS_Store

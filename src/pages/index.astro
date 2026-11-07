@@ -1,0 +1,167 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Icon from '../components/Icon.astro';
+import ProductCard from '../components/ProductCard.astro';
+import GiftFinder from '../components/GiftFinder.tsx';
+import HeroSlider from '../components/HeroSlider.astro';
+import ShopMap from '../components/ShopMap.astro';
+import { categories, products } from '../data/catalog';
+import { studioPrices, reviews } from '../data/content';
+import { shop, waLink, mapDirections } from '../data/shop';
+
+const popular = ['suport-sticla-vanatoare-mistret', 'masina-retro-lemn-pahare-shot', 'cutie-cadou-rosie-vin-pahare', 'suport-servire-bulldog-verde', 'barca-lemn-suport-sticla']
+  .map((s) => products.find((p) => p.slug === s)!)
+  .filter(Boolean);
+---
+<Layout>
+  <!-- Hero: slideshow centrat prin produsele din magazin -->
+  <HeroSlider />
+
+  <!-- Recenzii scurte, imediat sub hero -->
+  <section class="wrap mt-14" aria-labelledby="rec">
+    <div class="flex flex-wrap items-end justify-between gap-3">
+      <h2 id="rec" class="font-serif text-[1.75rem] font-extrabold text-ink">Ce spun clienții</h2>
+      <p class="flex items-center gap-2 text-[15px] text-muted">
+        <span class="flex text-accent-soft">{[0, 1, 2, 3, 4].map(() => <Icon name="star" size={17} />)}</span>
+        <b class="text-ink">{shop.rating.score} din 5</b> · {shop.rating.count} de recenzii pe Google
+      </p>
+    </div>
+    <ul class="-mx-5 mt-5 flex snap-x gap-4 overflow-x-auto px-5 pb-2 md:mx-0 md:grid md:grid-cols-4 md:overflow-visible md:px-0">
+      {reviews.map((r) => (
+        <li class="min-w-[270px] snap-start rounded-[10px] border border-line bg-white p-5">
+          <span class="flex text-accent-soft">{[0, 1, 2, 3, 4].map(() => <Icon name="star" size={15} />)}</span>
+          <p class="mt-3 text-[15px] leading-relaxed text-ink-2">{r.text}</p>
+          <p class="mt-3 text-[13px] text-muted"><b class="text-ink">{r.name}</b> · {r.product}</p>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <!-- Colecții pe tip de obiect -->
+  <section class="wrap mt-20" aria-labelledby="col">
+    <p class="eyebrow">Ce găsești pe raft</p>
+    <h2 id="col" class="h-sec mt-3">Descoperă colecțiile</h2>
+    <div class="mt-8 grid grid-cols-2 gap-x-3 gap-y-6 sm:gap-4 lg:grid-cols-4">
+      {categories.map((c) => (
+        <a href={`/categorie/${c.id}`} class="reveal group block">
+          <div class="overflow-hidden rounded-[10px] bg-photo">
+            <img src={c.image} alt="" width="600" height="700" loading="lazy" class="aspect-[6/7] w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]" />
+          </div>
+          <h3 class="mt-3 flex items-start justify-between gap-2 font-serif text-[1.02rem] font-bold leading-tight text-ink sm:mt-4 sm:items-center sm:text-[1.3rem]">
+            {c.name}
+            <Icon name="arrow" size={18} class="mt-0.5 shrink-0 text-accent transition-transform duration-200 group-hover:translate-x-1 sm:mt-0" />
+          </h3>
+          <p class="mt-1 hidden text-[15px] text-muted sm:block">{c.blurb}</p>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <!-- Pentru cine cauți cadou (interactiv) -->
+  <section class="mt-20 bg-cream-2 py-16 md:py-20" aria-labelledby="pc">
+    <div class="wrap">
+      <div class="mb-8 flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <p class="eyebrow">Ajutor la cadouri</p>
+          <h2 id="pc" class="h-sec mt-3">Pentru cine cauți cadou?</h2>
+        </div>
+        <p class="max-w-sm text-[15px] text-muted">Alege persoana și prețul. Îți arătăm pe loc ce avem pe raft.</p>
+      </div>
+      <GiftFinder client:visible />
+    </div>
+  </section>
+
+  <!-- Cele mai căutate -->
+  <section class="wrap mt-20" aria-labelledby="cc">
+    <div class="flex flex-wrap items-end justify-between gap-4">
+      <div>
+        <p class="eyebrow">Din magazin</p>
+        <h2 id="cc" class="h-sec mt-3">Cele mai căutate luna aceasta</h2>
+      </div>
+      <a href="/cadouri" class="font-semibold text-ink underline decoration-accent-soft underline-offset-4 hover:text-accent">Toate produsele</a>
+    </div>
+    <div class="mt-8 grid grid-cols-2 gap-x-4 gap-y-8 md:grid-cols-3 lg:grid-cols-5">
+      {popular.map((p) => <ProductCard p={p} />)}
+    </div>
+  </section>
+
+  <!-- Studio foto: partea de prezentare -->
+  <section class="wrap mt-24" aria-labelledby="sf">
+    <div class="grid gap-10 rounded-[12px] bg-ink px-6 py-12 text-[#e6ddcf] sm:px-12 lg:grid-cols-[1fr_1.05fr] lg:gap-16 lg:py-16">
+      <div class="flex flex-col justify-center">
+        <p class="eyebrow !text-[#d9c29a]">În spatele magazinului</p>
+        <h2 id="sf" class="mt-3 font-serif text-[clamp(2rem,1.3rem+2.4vw,3rem)] font-extrabold leading-[1.08] text-white">Studio foto, cu programare sau fără</h2>
+        <p class="mt-5 max-w-lg text-[1.04rem] leading-[1.75]">
+          Pozele pentru buletin, pașaport sau viză le facem pe loc, după normele fiecărui act, și ți le dăm printate în 10 minute.
+          Printăm fotografii de pe telefon sau stick, facem ședințe foto pentru familie și copii și restaurăm poze vechi.
+        </p>
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a href={waLink('Bună ziua! Aș dori o programare la studio foto.')} target="_blank" rel="noopener" class="btn btn-wa"><Icon name="wa" size={20} /> Programează pe WhatsApp</a>
+          <a href="/studio-foto" class="btn border border-white/30 text-white hover:bg-white/10">Toate serviciile</a>
+        </div>
+      </div>
+      <div class="rounded-[10px] bg-[#fbf8f2] p-6 text-ink sm:p-8">
+        <div class="flex items-baseline justify-between border-b border-line pb-3">
+          <h3 class="font-serif text-xl font-bold">Prețuri studio</h3>
+          <span class="text-sm text-muted">actualizate noiembrie 2026</span>
+        </div>
+        <ul class="mt-2">
+          {studioPrices.slice(0, 7).map((s) => (
+            <li class="flex items-baseline gap-3 py-2.5 text-[15px]">
+              <span><span class="font-semibold">{s.name}</span>{s.note && <span class="block text-[13px] text-muted">{s.note}</span>}</span>
+              <span class="price-leader" aria-hidden="true"></span>
+              <span class="whitespace-nowrap font-semibold">{s.price}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Personalizăm la cerere -->
+  <section class="wrap mt-24" aria-labelledby="pers">
+    <div class="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+      <div class="overflow-hidden rounded-[12px] bg-photo">
+        <img src="/img/p/barca-lemn-suport-sticla.webp" alt="Barcă din lemn tăiată la laser, cu sticlă" width="900" height="900" loading="lazy" class="aspect-[5/4] w-full object-cover" />
+      </div>
+      <div>
+        <p class="eyebrow">Personalizăm la cerere</p>
+        <h2 id="pers" class="h-sec mt-3">Numele lui, gravat pe lemn, în aceeași zi</h2>
+        <p class="mt-5 max-w-lg text-[1.04rem] leading-[1.75] text-muted">
+          Seturile din lemn le gravăm la laser cu un nume, o dată sau un mesaj scurt. Pe rame și albume punem poza ta.
+          Gravura de text e gratuită.
+        </p>
+        <ol class="mt-8 grid gap-5">
+          <li class="flex gap-4"><span class="grid size-9 shrink-0 place-items-center rounded-full border border-accent-soft font-serif font-bold text-accent">1</span><p><b class="text-ink">Alegi obiectul</b><span class="block text-[15px] text-muted">Din magazin sau de pe site, la orice set marcat „Se poate grava”.</span></p></li>
+          <li class="flex gap-4"><span class="grid size-9 shrink-0 place-items-center rounded-full border border-accent-soft font-serif font-bold text-accent">2</span><p><b class="text-ink">Ne scrii textul sau ne trimiți poza</b><span class="block text-[15px] text-muted">Direct la comandă sau pe WhatsApp. Îți trimitem o probă înainte să gravăm.</span></p></li>
+          <li class="flex gap-4"><span class="grid size-9 shrink-0 place-items-center rounded-full border border-accent-soft font-serif font-bold text-accent">3</span><p><b class="text-ink">Îl ridici sau ți-l trimitem</b><span class="block text-[15px] text-muted">Gata în aceeași zi pentru text, în 2-3 zile pentru foto pe obiect.</span></p></li>
+        </ol>
+        <a href="/personalizari" class="btn btn-ghost mt-8">Vezi ce putem personaliza <Icon name="arrow" size={18} /></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Magazinul fizic -->
+  <section class="wrap mt-24" aria-labelledby="mag">
+    <div class="grid gap-8 rounded-[12px] border border-line p-6 sm:p-10 lg:grid-cols-[1.1fr_1fr] lg:gap-14">
+      <div>
+        <p class="eyebrow">Te așteptăm</p>
+        <h2 id="mag" class="h-sec mt-3">Vino să vezi cadourile pe raft</h2>
+        <p class="mt-5 max-w-lg text-[1.04rem] leading-[1.75] text-muted">
+          Pe site e doar o parte din ce avem. În magazin găsești și modelele sezoniere, ambalăm cadoul pe loc și,
+          dacă ai nevoie, îți facem și poza pentru buletin cât aștepți.
+        </p>
+        <ul class="mt-7 grid gap-4 text-[15px] text-ink sm:grid-cols-2">
+          <li class="flex gap-3"><Icon name="pin" size={20} class="mt-0.5 shrink-0 text-accent" /><span><b class="block">Adresă</b>{shop.address}, {shop.city}</span></li>
+          <li class="flex gap-3"><Icon name="phone" size={20} class="mt-0.5 shrink-0 text-accent" /><span><b class="block">Telefon și WhatsApp</b><a href={shop.phoneHref} class="hover:underline">{shop.phone}</a></span></li>
+          <li class="flex gap-3 sm:col-span-2"><Icon name="clock" size={20} class="mt-0.5 shrink-0 text-accent" /><span><b class="block">Program</b>{shop.hours.map((h) => <span class="mr-4 inline-block">{h.days}: {h.time}</span>)}</span></li>
+        </ul>
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a href={mapDirections} target="_blank" rel="noopener" class="btn btn-ink"><Icon name="pin" size={18} /> Indicații în Google Maps</a>
+          <a href="/despre" class="btn btn-ghost">Despre noi</a>
+        </div>
+      </div>
+      <ShopMap class="min-h-[380px]" />
+    </div>
+  </section>
+</Layout>

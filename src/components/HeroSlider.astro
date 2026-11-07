@@ -1,0 +1,449 @@
+---
+import Icon from './Icon.astro';
+import { products, discount } from '../data/catalog';
+
+// Bannere de campanie. TODO(real): editabile din admin (titlu, text, produs, culoare, perioadă).
+type Tone = 'ink' | 'forest' | 'sand' | 'wine' | 'cream';
+const raw: { slug: string; tone: Tone; label: string; title: string; text: string; cta: string; href?: string }[] = [
+  {
+    slug: 'suport-sticla-vanatoare-mistret',
+    tone: 'ink',
+    label: 'Black Friday · până pe 30 noiembrie',
+    title: 'Până la -20% la cadourile de pe raft',
+    text: 'Suporturi de sticlă pictate manual și statuete de servire, la preț redus. Avem câte 2-3 bucăți din fiecare model.',
+    cta: 'Vezi reducerile',
+    href: '/cadouri',
+  },
+  {
+    slug: 'suport-sticla-caine-rata',
+    tone: 'forest',
+    label: 'Pentru vânători',
+    title: 'Cadoul pe care îl pune pe raft, la cabană',
+    text: 'Retrieverul cu rața în gură, turnat din rășină și pictat fir cu fir. Ține o sticlă de 0,75 l.',
+    cta: 'Vezi produsul',
+  },
+  {
+    slug: 'masina-retro-lemn-pahare-shot',
+    tone: 'sand',
+    label: 'Gravură gratuită, în aceeași zi',
+    title: 'Numărul lui de mașină, gravat pe lemn',
+    text: 'Mașinuța anilor 70 cu pahare de shot pe plafon. Scrii numărul sau numele la comandă și îl gravăm la noi în atelier.',
+    cta: 'Personalizează',
+  },
+  {
+    slug: 'cutie-cadou-rosie-vin-pahare',
+    tone: 'wine',
+    label: 'Gata de dat',
+    title: 'Cutia cu vin pentru nași, ambalată cu fundă',
+    text: 'Vin roșu sec și două pahare, cu etichetă „La mulți ani”. O ridici din magazin în drum spre petrecere.',
+    cta: 'Vezi produsul',
+  },
+  {
+    slug: 'suport-servire-bulldog-verde',
+    tone: 'cream',
+    label: 'Black Friday · decor și servire',
+    title: 'Bulldogul care ține prăjiturile de sărbători',
+    text: 'Două farfurii aurii, papion și ochelari de soare. Atrage privirile pe orice masă.',
+    cta: 'Vezi produsul',
+  },
+];
+const slides = raw.map((s) => ({ ...s, p: products.find((p) => p.slug === s.slug)! })).filter((s) => s.p);
+const fmt = (n: number) => `${n.toLocaleString('ro-RO', { minimumFractionDigits: 2 })} lei`;
+---
+<section class="wrap pt-6" aria-label="Oferte și noutăți">
+  <h1 class="sr-only">Foto &amp; Cadouri, magazin de cadouri și studio foto</h1>
+  <div class="relative" data-hero>
+    <div class="banner overflow-hidden rounded-[14px]" aria-roledescription="carusel" aria-live="off">
+      {slides.map((s, k) => {
+        const off = discount(s.p);
+        return (
+          <article class={`slide tone-${s.tone} ${k === 0 ? 'on' : ''}`} data-slide aria-roledescription="slide" aria-label={`${k + 1} din ${slides.length}: ${s.title}`} aria-hidden={k !== 0 ? 'true' : 'false'}>
+            <a href={`/produs/${s.p.slug}`} class="scene" tabindex="-1" aria-hidden="true">
+              <img src={`/img/banner/b${k + 1}.webp`} alt="" width="1600" height="700" loading={k === 0 ? 'eager' : 'lazy'} fetchpriority={k === 0 ? 'high' : 'auto'} />
+              {off > 0 && <span class="disc"><small>reducere</small>-{off}%</span>}
+            </a>
+            <div class="relative z-[1] px-6 pb-9 pt-6 sm:px-12 lg:flex lg:min-h-[540px] lg:w-[54%] lg:items-center lg:px-16 lg:py-12">
+              <div class="copy">
+                <p class="label">{s.label}</p>
+                <p class="title">{s.title}</p>
+                <p class="desc">{s.text}</p>
+                <p class="price">
+                  <b>{fmt(s.p.price)}</b>
+                  {s.p.oldPrice && <s>{fmt(s.p.oldPrice)}</s>}
+                  <span class="pname">{s.p.name}</span>
+                </p>
+                <div class="mt-6 flex flex-wrap gap-3">
+                  <a href={s.href ?? `/produs/${s.p.slug}`} class="btn btn-accent" tabindex={k === 0 ? 0 : -1}>{s.cta} <Icon name="arrow" size={18} /></a>
+                  <a href="/cadouri" class="btn ghost" tabindex={k === 0 ? 0 : -1}>Toate cadourile</a>
+                </div>
+              </div>
+            </div>
+          </article>
+        );
+      })}
+    </div>
+
+    <div class="mt-4 flex items-center justify-between gap-4">
+      <div class="flex items-center gap-4">
+        <span class="w-14 font-serif text-[15px] font-bold tabular-nums text-ink" data-count>01 / {String(slides.length).padStart(2, '0')}</span>
+        <div class="flex items-center gap-2" role="group" aria-label="Alege bannerul">
+          {slides.map((s, k) => (
+            <button type="button" class="dot" data-dot aria-label={`Banner ${k + 1}: ${s.title}`} aria-current={k === 0 ? 'true' : 'false'}><i></i></button>
+          ))}
+        </div>
+      </div>
+      <div class="flex gap-2">
+        <button type="button" class="nav-btn" data-prev aria-label="Bannerul anterior">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true"><path d="m15 6-6 6 6 6" /></svg>
+        </button>
+        <button type="button" class="nav-btn" data-next aria-label="Bannerul următor">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true"><path d="m9 6 6 6-6 6" /></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .banner {
+    display: grid;
+  }
+  .slide {
+    grid-area: 1 / 1;
+    min-height: 470px;
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity 600ms ease-out,
+      visibility 0s linear 600ms;
+    --fg: #fff;
+    --muted: #d8cfc1;
+    --lab: #dcc39a;
+    --spot: rgb(255 236 205 / 0.16);
+  }
+  .slide.on {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 600ms ease-out;
+    z-index: 1;
+  }
+  .tone-ink {
+    background: #1f1912;
+    --fade: rgb(31 25 18 / 0.92);
+  }
+  .tone-forest {
+    background: #1e2a1d;
+    --fade: rgb(30 42 29 / 0.9);
+    --lab: #d6c79a;
+    --muted: #d2d6c8;
+  }
+  .tone-wine {
+    background: #3a1714;
+    --fade: rgb(58 23 20 / 0.9);
+    --lab: #e7c48f;
+    --muted: #e6d2cb;
+  }
+  .tone-sand {
+    background: #e2d3bb;
+    --fade: rgb(226 211 187 / 0.85);
+    --fg: var(--color-ink);
+    --muted: #5f5547;
+    --lab: var(--color-accent-dark);
+    --spot: rgb(255 255 255 / 0.55);
+  }
+  .tone-cream {
+    background: #e9e0d0;
+    --fade: rgb(233 224 208 / 0.85);
+    --fg: var(--color-ink);
+    --muted: #5f5547;
+    --lab: var(--color-accent-dark);
+    --spot: rgb(255 255 255 / 0.7);
+  }
+
+  .copy {
+    color: var(--fg);
+  }
+  .label {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--lab);
+    font-size: 0.92rem;
+    font-weight: 600;
+  }
+  .label::before {
+    content: '';
+    width: 26px;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.7;
+  }
+  .title {
+    margin-top: 14px;
+    font-family: var(--font-serif);
+    font-weight: 800;
+    font-size: clamp(2rem, 1.2rem + 2.7vw, 3.5rem);
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    max-width: 15ch;
+    text-wrap: balance;
+  }
+  .desc {
+    margin-top: 16px;
+    max-width: 34rem;
+    color: var(--muted);
+    font-size: 1.03rem;
+    line-height: 1.7;
+  }
+  .price {
+    margin-top: 18px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 4px 12px;
+    color: var(--fg);
+  }
+  .price b {
+    font-size: 1.55rem;
+    font-weight: 700;
+  }
+  .price s {
+    color: var(--muted);
+    font-size: 1.02rem;
+  }
+  .pname {
+    flex-basis: 100%;
+    color: var(--muted);
+    font-size: 0.88rem;
+  }
+  .ghost {
+    border: 1px solid color-mix(in srgb, var(--fg) 35%, transparent);
+    color: var(--fg);
+  }
+  .ghost:hover {
+    background: color-mix(in srgb, var(--fg) 10%, transparent);
+  }
+
+  .slide {
+    position: relative;
+    min-height: 0;
+  }
+  .scene {
+    position: relative;
+    display: block;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+  }
+  .scene img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 74% 60%;
+    transform: scale(1.06);
+    transition: transform 6s ease-out;
+  }
+  .slide.on .scene img {
+    transform: scale(1);
+  }
+  @media (min-width: 640px) {
+    .scene {
+      aspect-ratio: 16 / 8;
+    }
+  }
+  @media (min-width: 1024px) {
+    .scene {
+      position: absolute;
+      inset: 0;
+      aspect-ratio: auto;
+    }
+    .scene img {
+      object-position: 62% 50%;
+    }
+    .scene::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, var(--fade) 0%, var(--fade) 30%, transparent 62%);
+      pointer-events: none;
+    }
+  }
+  .copy > * {
+    transform: translateY(10px);
+    opacity: 0;
+    transition:
+      transform 600ms ease-out,
+      opacity 600ms ease-out;
+  }
+  .slide.on .copy > * {
+    transform: none;
+    opacity: 1;
+  }
+  .slide.on .copy > :nth-child(2) {
+    transition-delay: 60ms;
+  }
+  .slide.on .copy > :nth-child(3) {
+    transition-delay: 120ms;
+  }
+  .slide.on .copy > :nth-child(4),
+  .slide.on .copy > :nth-child(5) {
+    transition-delay: 180ms;
+  }
+  .disc {
+    position: absolute;
+    top: 9%;
+    right: 9%;
+    z-index: 2;
+    display: grid;
+    place-content: center;
+    width: 92px;
+    height: 92px;
+    border-radius: 50%;
+    background: var(--color-accent);
+    color: #fff;
+    font-family: var(--font-serif);
+    font-size: 1.7rem;
+    font-weight: 800;
+    line-height: 1;
+    text-align: center;
+    box-shadow: 0 10px 24px -10px rgb(0 0 0 / 0.5);
+    rotate: 8deg;
+  }
+  .disc small {
+    display: block;
+    margin-bottom: 3px;
+    font-family: var(--font-sans);
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+  @media (max-width: 639px) {
+    .disc {
+      width: 72px;
+      height: 72px;
+      font-size: 1.3rem;
+    }
+  }
+
+  .nav-btn {
+    display: grid;
+    width: 46px;
+    height: 46px;
+    place-items: center;
+    border-radius: 999px;
+    border: 1px solid var(--color-line);
+    background: #fff;
+    color: var(--color-ink);
+    transition:
+      background-color 160ms ease-out,
+      border-color 160ms ease-out;
+  }
+  .nav-btn:hover {
+    border-color: var(--color-accent-soft);
+    background: var(--color-cream);
+  }
+  @media (max-width: 639px) {
+    .nav-btn {
+      display: none;
+    }
+    .dot {
+      width: 24px;
+    }
+  }
+  .dot {
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 24px;
+  }
+  .dot i {
+    display: block;
+    width: 100%;
+    height: 3px;
+    border-radius: 3px;
+    background: #ddd2c0;
+    overflow: hidden;
+  }
+  .dot[aria-current='true'] i {
+    background: linear-gradient(var(--color-accent), var(--color-accent)) left / var(--p, 0%) 100% no-repeat, #ddd2c0;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .slide,
+    .art img,
+    .copy > * {
+      transition-duration: 1ms !important;
+    }
+  }
+</style>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-hero]');
+  if (root) {
+    const slides = [...root.querySelectorAll<HTMLElement>('[data-slide]')];
+    const dots = [...root.querySelectorAll<HTMLButtonElement>('[data-dot]')];
+    const count = root.querySelector<HTMLElement>('[data-count]');
+    const n = slides.length;
+    const DUR = 5500;
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let i = 0;
+    let t0 = performance.now();
+    let paused = reduce;
+    let elapsed = 0;
+
+    const go = (to: number) => {
+      i = (to + n) % n;
+      slides.forEach((s, k) => {
+        const on = k === i;
+        s.classList.toggle('on', on);
+        s.setAttribute('aria-hidden', String(!on));
+        s.querySelectorAll('.copy a').forEach((a) => a.setAttribute('tabindex', on ? '0' : '-1'));
+      });
+      dots.forEach((d, k) => {
+        d.setAttribute('aria-current', String(k === i));
+        d.style.removeProperty('--p');
+      });
+      if (count) count.textContent = `${String(i + 1).padStart(2, '0')} / ${String(n).padStart(2, '0')}`;
+      elapsed = 0;
+      t0 = performance.now();
+    };
+
+    const tick = (now: number) => {
+      if (!paused) {
+        const p = elapsed + (now - t0);
+        dots[i]?.style.setProperty('--p', `${Math.min(100, (p / DUR) * 100)}%`);
+        if (p >= DUR) go(i + 1);
+      }
+      requestAnimationFrame(tick);
+    };
+    const pause = () => {
+      if (paused) return;
+      elapsed += performance.now() - t0;
+      paused = true;
+    };
+    const resume = () => {
+      if (reduce || !paused) return;
+      t0 = performance.now();
+      paused = false;
+    };
+
+    root.querySelector('[data-prev]')?.addEventListener('click', () => go(i - 1));
+    root.querySelector('[data-next]')?.addEventListener('click', () => go(i + 1));
+    dots.forEach((d, k) => d.addEventListener('click', () => go(k)));
+    root.addEventListener('mouseenter', pause);
+    root.addEventListener('mouseleave', resume);
+    root.addEventListener('focusin', pause);
+    root.addEventListener('focusout', resume);
+    root.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') go(i - 1);
+      if (e.key === 'ArrowRight') go(i + 1);
+    });
+    let x0 = 0;
+    root.addEventListener('touchstart', (e) => (x0 = e.touches[0].clientX), { passive: true });
+    root.addEventListener('touchend', (e) => {
+      const dx = e.changedTouches[0].clientX - x0;
+      if (Math.abs(dx) > 40) go(dx < 0 ? i + 1 : i - 1);
+    });
+    document.addEventListener('visibilitychange', () => (document.hidden ? pause() : resume()));
+    go(0);
+    requestAnimationFrame(tick);
+  }
+</script>

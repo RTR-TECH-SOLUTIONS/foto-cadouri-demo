@@ -1,0 +1,90 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Icon from '../../components/Icon.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import ProductBuy from '../../components/ProductBuy.tsx';
+import ProductGallery from '../../components/ProductGallery.tsx';
+import { products, categoryName, discount, stockLabel, type Product } from '../../data/catalog';
+import { shop, waLink } from '../../data/shop';
+
+export function getStaticPaths() {
+  return products.map((p) => ({ params: { slug: p.slug }, props: { p } }));
+}
+const { p } = Astro.props as { p: Product };
+const fmt = (n: number) => `${n.toLocaleString('ro-RO', { minimumFractionDigits: 2 })} lei`;
+const off = discount(p);
+const similar = products.filter((x) => x.slug !== p.slug && (x.category === p.category || x.for.some((f) => p.for.includes(f)))).slice(0, 4);
+---
+<Layout title={p.name} active={p.category}>
+  <section class="wrap pt-8">
+    <nav class="text-sm text-muted" aria-label="Breadcrumb">
+      <a href="/" class="hover:text-ink">Acasă</a> / <a href="/cadouri" class="hover:text-ink">Cadouri</a>{" / "}<a href={`/categorie/${p.category}`} class="hover:text-ink">{categoryName(p.category)}</a>
+    </nav>
+
+    <div class="mt-6 grid grid-cols-1 gap-10 lg:grid-cols-[1.1fr_1fr] lg:gap-14 [&>*]:min-w-0">
+      <div class="lg:sticky lg:top-6 lg:self-start">
+        <ProductGallery
+          client:load
+          badge={off > 0 ? `-${off}%` : p.badge}
+          images={[
+            { src: p.image, alt: p.name, label: 'Fotografie de produs' },
+            { src: `/img/orig/${p.slug}.jpg`, alt: `${p.name}, fotografiat în magazin`, label: 'Fotografiat în magazin', cover: true },
+          ]}
+        />
+      </div>
+
+      <div>
+        <p class="text-sm font-medium text-accent">{categoryName(p.category)}</p>
+        <h1 class="mt-2 font-serif text-[clamp(1.8rem,1.3rem+1.6vw,2.5rem)] font-extrabold leading-[1.12] text-ink">{p.name}</h1>
+        <p class="mt-3 flex items-center gap-2 text-sm text-muted">
+          <span class="flex text-accent-soft">{[0, 1, 2, 3, 4].map(() => <Icon name="star" size={15} />)}</span> recomandat de clienții magazinului
+        </p>
+        <p class="mt-5 flex flex-wrap items-baseline gap-x-3 gap-y-1 whitespace-nowrap">
+          <span class="text-[1.7rem] font-bold text-ink-2">{fmt(p.price)}</span>
+          {p.oldPrice && <s class="text-lg text-muted">{fmt(p.oldPrice)}</s>}
+          {off > 0 && <span class="rounded-md bg-cream px-2 py-0.5 text-sm font-semibold text-accent">economisești {p.oldPrice! - p.price} lei</span>}
+        </p>
+        <p class="mt-4 text-[1.03rem] leading-[1.75] text-muted">{p.description[0]}</p>
+        <p class={`mt-4 flex items-center gap-2 text-[15px] font-semibold ${p.stock === 'la-comanda' ? 'text-accent' : 'text-ok'}`}>
+          <span class={`size-2 rounded-full ${p.stock === 'la-comanda' ? 'bg-accent' : 'bg-ok'}`}></span>{stockLabel[p.stock]}
+        </p>
+
+        <ProductBuy client:load slug={p.slug} name={p.name} price={p.price} image={p.image} engravable={p.engravable} wa={waLink(`Bună ziua! Mă interesează: ${p.name}`)} />
+
+        <ul class="mt-7 grid gap-3 border-y border-line py-5 text-[15px] text-ink">
+          <li class="flex gap-3"><Icon name="store" size={20} class="shrink-0 text-accent" /><span><b>Ridicare din magazin, gratuit.</b> Te sunăm când e gata, de obicei în aceeași zi.</span></li>
+          <li class="flex gap-3"><Icon name="truck" size={20} class="shrink-0 text-accent" /><span><b>Curier în 24-48 h</b>, {shop.shipping} lei, gratuit peste {shop.freeShipping} lei.</span></li>
+          <li class="flex gap-3"><Icon name="gift" size={20} class="shrink-0 text-accent" /><span><b>Ambalaj cadou gratuit</b>, cu fundă și felicitare scrisă de mână.</span></li>
+        </ul>
+
+        <div class="mt-2 divide-y divide-line">
+          <details class="group py-4" open>
+            <summary class="flex cursor-pointer list-none items-center justify-between font-serif text-lg font-bold text-ink">Descriere <Icon name="chevron" class="transition-transform group-open:rotate-180" /></summary>
+            {p.description.map((d) => <p class="mt-3 text-[15px] leading-[1.75] text-muted">{d}</p>)}
+          </details>
+          <details class="group py-4">
+            <summary class="flex cursor-pointer list-none items-center justify-between font-serif text-lg font-bold text-ink">Material și dimensiuni <Icon name="chevron" class="transition-transform group-open:rotate-180" /></summary>
+            <dl class="mt-3 grid grid-cols-[130px_1fr] gap-y-2 text-[15px]">
+              <dt class="text-muted">Material</dt><dd class="text-ink">{p.material}</dd>
+              <dt class="text-muted">Dimensiuni</dt><dd class="text-ink">{p.size}</dd>
+              <dt class="text-muted">Gravură</dt><dd class="text-ink">{p.engravable ? 'Da, gratuit, până la 28 de caractere' : 'Nu'}</dd>
+            </dl>
+          </details>
+          <details class="group py-4">
+            <summary class="flex cursor-pointer list-none items-center justify-between font-serif text-lg font-bold text-ink">Livrare și retur <Icon name="chevron" class="transition-transform group-open:rotate-180" /></summary>
+            <p class="mt-3 text-[15px] leading-[1.75] text-muted">Ambalăm fiecare obiect în folie cu bule și cutie dublă. Produsele negravate se pot returna în 14 zile. Cele gravate cu nume nu se returnează, pentru că sunt făcute doar pentru tine.</p>
+          </details>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {similar.length > 0 && (
+    <section class="wrap mt-24" aria-labelledby="sim">
+      <h2 id="sim" class="h-sec">Se potrivesc cu el</h2>
+      <div class="mt-8 grid grid-cols-2 gap-x-4 gap-y-8 md:grid-cols-4">
+        {similar.map((x) => <ProductCard p={x} />)}
+      </div>
+    </section>
+  )}
+</Layout>

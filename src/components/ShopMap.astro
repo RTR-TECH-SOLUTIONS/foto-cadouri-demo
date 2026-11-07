@@ -1,0 +1,36 @@
+---
+import Icon from './Icon.astro';
+import { shop, mapEmbed, mapDirections } from '../data/shop';
+
+interface Props {
+  class?: string;
+}
+const { class: cls = '' } = Astro.props;
+---
+<div class={`map relative isolate min-h-[340px] overflow-hidden rounded-[10px] border border-line bg-cream ${cls}`}>
+  <iframe
+    src={mapEmbed}
+    title={`Harta: ${shop.name}, ${shop.address}`}
+    loading="lazy"
+    referrerpolicy="no-referrer-when-downgrade"
+    allowfullscreen
+    class="absolute inset-0 size-full border-0"
+  ></iframe>
+  <div class="pointer-events-none absolute inset-x-3 bottom-3 sm:inset-x-auto sm:left-4 sm:bottom-4 sm:max-w-[340px]">
+    <div class="pointer-events-auto flex items-center gap-3 rounded-[10px] bg-white/97 p-3 pr-4 shadow-[0_10px_30px_-12px_rgb(44_36_25/0.45)] ring-1 ring-black/5">
+      <span class="grid size-11 shrink-0 place-items-center rounded-lg bg-accent text-white"><Icon name="store" size={22} /></span>
+      <div class="min-w-0 flex-1 text-sm leading-snug">
+        <b class="block text-ink">{shop.name}</b>
+        <span class="block truncate text-muted">{shop.address}</span>
+        <span class="block text-muted">{shop.hoursShort}</span>
+      </div>
+      <a href={mapDirections} target="_blank" rel="noopener" class="shrink-0 rounded-lg border border-line px-3 py-2 text-[13px] font-semibold text-ink hover:border-accent-soft hover:bg-cream">Indicații</a>
+    </div>
+  </div>
+</div>
+
+<style>
+  .map iframe {
+    filter: saturate(0.78) sepia(0.08) contrast(0.98);
+  }
+</style>

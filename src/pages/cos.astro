@@ -1,0 +1,13 @@
+---
+import Layout from '../layouts/Layout.astro';
+import CartPage from '../components/CartPage.tsx';
+---
+<Layout title="Coșul tău">
+  <section class="wrap pt-10">
+    <nav class="text-sm text-muted" aria-label="Breadcrumb"><a href="/" class="hover:text-ink">Acasă</a> / <span class="text-ink">Coș</span></nav>
+    <h1 class="h-sec mt-4">Coșul tău</h1>
+  </section>
+  <section class="wrap mt-10">
+    <CartPage client:load />
+  </section>
+</Layout>

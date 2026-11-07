@@ -1,0 +1,32 @@
+{
+  "name": "cadouri-foto-demo",
+  "type": "module",
+  "version": "0.0.1",
+  "private": true,
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "build:pages": "GH_PAGES=1 astro build && node scripts/prefix-base.mjs"
+  },
+  "dependencies": {
+    "@astrojs/react": "^7.0.0",
+    "@fontsource-variable/dm-sans": "^5.2.0",
+    "@fontsource-variable/playfair-display": "^5.2.0",
+    "@tailwindcss/vite": "^4.3.3",
+    "astro": "^7.3.5",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "tailwindcss": "^4.3.3"
+  },
+  "devDependencies": {
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "sharp": "^0.35.5",
+    "typescript": "^6.0.3"
+  }
+}
