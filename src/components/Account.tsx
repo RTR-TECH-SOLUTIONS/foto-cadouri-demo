@@ -1,6 +1,12 @@
 import { useEffect, useState } from 'react';
 import { fmt, readOrders, type Order } from '../lib/cart';
 
+const BENEFITS = [
+  'Vezi când e gata comanda de ridicat',
+  'Primești aici proba pentru gravură, înainte să gravăm',
+  'Salvezi adresa pentru livrare prin curier',
+];
+
 // Cont demo în localStorage. TODO(real): Supabase Auth (e-mail + parolă, resetare parolă), comenzi din backend.
 
 interface User {
@@ -116,23 +122,50 @@ export default function Account() {
 
   return (
     <div className="mx-auto grid max-w-5xl overflow-hidden rounded-[12px] border border-line md:grid-cols-[1fr_1.1fr]">
-      <div className="hidden flex-col justify-between bg-cream p-10 md:flex">
-        <div>
-          <p className="eyebrow">Contul tău</p>
-          <h2 className="mt-3 font-serif text-[2rem] font-extrabold leading-tight text-ink">Comenzile și gravurile tale, într-un singur loc</h2>
-          <ul className="mt-7 grid gap-4 text-[15px] text-ink">
-            {['Vezi când e gata comanda de ridicat', 'Primești aici proba pentru gravură, înainte să gravăm', 'Salvezi adresa pentru livrare prin curier'].map((t) => (
+      <aside className="relative order-2 isolate flex flex-col overflow-hidden bg-[#1d1610] text-white md:order-1 md:min-h-[680px]">
+        <img
+          src="/img/scene/cont.webp"
+          alt=""
+          width={1000}
+          height={1250}
+          loading="lazy"
+          className="absolute inset-0 -z-10 hidden size-full object-cover object-bottom md:block"
+        />
+        <div className="absolute inset-0 -z-10 hidden bg-gradient-to-b from-[#1b140e]/90 via-[#1b140e]/55 via-45% to-transparent to-75% md:block" aria-hidden />
+        <div className="p-7 sm:p-9 md:p-10">
+          <p className="eyebrow !text-[#e2c99c] before:!bg-[#e2c99c]">Contul tău</p>
+          <h2 className="mt-3 max-w-[17ch] font-serif text-[1.75rem] font-extrabold leading-[1.1] md:text-[2.15rem]">Comenzile și gravurile tale, într-un singur loc</h2>
+          <ul className="mt-6 grid gap-3 text-[15px] text-white/90 md:mt-7">
+            {BENEFITS.map((t) => (
               <li key={t} className="flex gap-3">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="mt-0.5 shrink-0 text-accent" aria-hidden><path d="m5 12.5 4.2 4.2L19 7" /></svg>
+                <span className="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full bg-[#e2c99c] text-[#1b140e]">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" aria-hidden><path d="m5 12.5 4.2 4.2L19 7" /></svg>
+                </span>
                 {t}
               </li>
             ))}
           </ul>
         </div>
-        <img src="/img/p/masina-retro-lemn-pahare-shot.webp" alt="" width={600} height={600} className="mx-auto mt-6 w-full max-w-[300px] mix-blend-multiply" />
-      </div>
+        <div className="relative aspect-[10/9] md:hidden">
+          <img
+            src="/img/scene/cont.webp"
+            alt="Cutie cadou cu vin, suport de sticlă cu câine și suport cu cerb, pe un raft din lemn"
+            width={1000}
+            height={1250}
+            loading="lazy"
+            className="absolute inset-0 size-full object-cover object-bottom"
+          />
+          <div className="absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-[#1d1610] to-transparent" aria-hidden />
+        </div>
+        <div className="absolute inset-x-0 bottom-0 flex items-center justify-between gap-3 px-5 pb-5 sm:px-9 md:mt-auto md:px-10 md:pb-8">
+          <p className="flex items-center gap-2 whitespace-nowrap rounded-lg bg-black/50 px-3 py-2 text-[13px] backdrop-blur-sm">
+            <span className="text-[#e2c99c]" aria-hidden>★★★★★</span> 4,9 din 5 pe Google
+          </p>
+          <a href="/cadouri" className="hidden whitespace-nowrap rounded-lg bg-white/92 px-3 py-2 text-[13px] font-semibold text-ink hover:bg-white sm:inline-block">Vezi cadourile</a>
+        </div>
+      </aside>
 
-      <div className="bg-white p-6 sm:p-10">
+      <div className="order-1 bg-white p-6 sm:p-10 md:order-2">
         <div className="grid grid-cols-2 rounded-[10px] bg-cream-2 p-1" role="tablist" aria-label="Autentificare">
           {(['login', 'signup'] as const).map((m) => (
             <button

@@ -1,0 +1,30 @@
+{
+ "bg": "../scene-dl/r3.jpg",
+ "out": "/Users/mariorotaru/Desktop/RTR TECH SOLUTIONS/website/templates/magazin online/cadouri-foto/public/img/scene/cont.webp",
+ "W": 1000,
+ "H": 1250,
+ "T": 1000,
+ "blur": 7,
+ "brightness": 0.72,
+ "position": "left",
+ "items": [
+  {
+   "png": "raw/box.png",
+   "h": 430,
+   "cx": 300,
+   "dy": 34
+  },
+  {
+   "png": "raw/deer.png",
+   "h": 300,
+   "cx": 730,
+   "dy": 60
+  },
+  {
+   "png": "raw/dog-clean.png",
+   "h": 500,
+   "cx": 520,
+   "dy": 92
+  }
+ ]
+}
