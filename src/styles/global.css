@@ -242,3 +242,22 @@
     transform: none;
   }
 }
+
+/* Panou de administrare: intrări discrete pentru sertare, meniu și notificări */
+@keyframes adm-fade {
+  from { opacity: 0; }
+}
+@keyframes adm-slide {
+  from { transform: translateX(32px); opacity: 0; }
+}
+@keyframes adm-slide-l {
+  from { transform: translateX(-100%); }
+}
+@keyframes adm-up {
+  from { transform: translateY(10px); opacity: 0; }
+}
+.adm-fade { animation: adm-fade 200ms ease-out; }
+.adm-slide { animation: adm-slide 240ms cubic-bezier(0.2, 0.8, 0.2, 1); }
+.adm-slide-l { animation: adm-slide-l 240ms cubic-bezier(0.2, 0.8, 0.2, 1); }
+.adm-toast { animation: adm-up 220ms ease-out; }
+.adm-in { animation: adm-up 260ms ease-out; }

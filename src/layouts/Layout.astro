@@ -44,6 +44,8 @@ const fullTitle = title ? `${title} | ${shop.name}` : `${shop.name}, ${shop.tagl
     )}
     <script>
       import { addToCart } from '../lib/cart';
+      import { patchPage } from '../lib/overrides';
+      patchPage();
       document.addEventListener('click', (e) => {
         const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-add]');
         if (!btn) return;

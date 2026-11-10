@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { addToCart, fmt } from '../lib/cart';
+import { readProductEdits, withEdit } from '../lib/overrides';
 
 interface Props {
   slug: string;
@@ -10,7 +11,9 @@ interface Props {
   wa: string;
 }
 
-export default function ProductBuy({ slug, name, price, image, engravable, wa }: Props) {
+export default function ProductBuy({ slug, name, price: basePrice, image, engravable, wa }: Props) {
+  const [price, setPrice] = useState(basePrice);
+  useEffect(() => setPrice(withEdit({ price: basePrice }, readProductEdits()[slug]).price), [slug, basePrice]);
   const [qty, setQty] = useState(1);
   const [text, setText] = useState('');
 

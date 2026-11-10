@@ -40,9 +40,9 @@ const similar = products.filter((x) => x.slug !== p.slug && (x.category === p.ca
           <span class="flex text-accent-soft">{[0, 1, 2, 3, 4].map(() => <Icon name="star" size={15} />)}</span> recomandat de clienții magazinului
         </p>
         <p class="mt-5 flex flex-wrap items-baseline gap-x-3 gap-y-1 whitespace-nowrap">
-          <span class="text-[1.7rem] font-bold text-ink-2">{fmt(p.price)}</span>
-          {p.oldPrice && <s class="text-lg text-muted">{fmt(p.oldPrice)}</s>}
-          {off > 0 && <span class="rounded-md bg-cream px-2 py-0.5 text-sm font-semibold text-accent">economisești {p.oldPrice! - p.price} lei</span>}
+          <span class="text-[1.7rem] font-bold text-ink-2" data-now={p.slug}>{fmt(p.price)}</span>
+          <s class="text-lg text-muted" data-old={p.slug} hidden={!p.oldPrice}>{p.oldPrice ? fmt(p.oldPrice) : ''}</s>
+          <span class="rounded-md bg-cream px-2 py-0.5 text-sm font-semibold text-accent" data-save={p.slug} hidden={off <= 0}>economisești {p.oldPrice ? p.oldPrice - p.price : 0} lei</span>
         </p>
         <p class="mt-4 text-[1.03rem] leading-[1.75] text-muted">{p.description[0]}</p>
         <p class={`mt-4 flex items-center gap-2 text-[15px] font-semibold ${p.stock === 'la-comanda' ? 'text-accent' : 'text-ok'}`}>

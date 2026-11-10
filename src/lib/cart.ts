@@ -63,7 +63,7 @@ export interface Order {
   payment: 'card' | 'ramburs' | 'magazin';
   total: number;
   items: { name: string; qty: number; engraving?: string }[];
-  status: 'Nouă' | 'În pregătire' | 'Gata de ridicare' | 'Trimisă';
+  status: 'Nouă' | 'În pregătire' | 'Gata de ridicare' | 'Trimisă' | 'Finalizată' | 'Anulată';
 }
 
 export function saveOrder(o: Order) {

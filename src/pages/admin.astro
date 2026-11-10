@@ -1,0 +1,7 @@
+---
+import Layout from '../layouts/Layout.astro';
+import AdminApp from '../components/admin/AdminApp.tsx';
+---
+<Layout title="Panou de administrare" bare>
+  <AdminApp client:only="react" />
+</Layout>

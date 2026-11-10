@@ -4,7 +4,7 @@ import { readdir, readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
 const BASE = '/foto-cadouri-demo';
-const ROOTS = 'img|produs|cadouri|categorie|cos|finalizare|cont|studio-foto|personalizari|despre|favicon\\.svg';
+const ROOTS = 'img|produs|cadouri|categorie|cos|finalizare|cont|studio-foto|personalizari|despre|admin|favicon\\.svg';
 
 async function* walk(dir) {
   for (const e of await readdir(dir, { withFileTypes: true })) {
@@ -21,6 +21,7 @@ for await (const f of walk('dist')) {
   const out = src
     .replace(new RegExp(`(["'\`(=])/(${ROOTS})(?=[/?#"'\`)$]|$)`, 'g'), `$1${BASE}/$2`)
     .replace(/href=(["'])\/(?=\1|#)/g, `href=$1${BASE}/`)
+    .replace(/href:([`"'])\/\1/g, `href:$1${BASE}/$1`)
     .replace(new RegExp(`(&quot;)/(${ROOTS})(?=[/?#&])`, 'g'), `$1${BASE}/$2`);
   if (out !== src) {
     await writeFile(f, out);

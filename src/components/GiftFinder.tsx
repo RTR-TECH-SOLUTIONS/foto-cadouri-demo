@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { products, recipients, type Recipient } from '../data/catalog';
 import { addToCart, fmt } from '../lib/cart';
+import { liveProducts } from '../lib/overrides';
 
 const budgets = [
   { id: 'sub100', label: 'Sub 100 lei', test: (p: number) => p < 100 },
@@ -20,6 +21,8 @@ const tileImg: Record<Recipient, string> = {
 export default function GiftFinder() {
   const [who, setWho] = useState<Recipient>('el');
   const [budget, setBudget] = useState<(typeof budgets)[number]['id']>('oricat');
+  const [all, setAll] = useState(products);
+  useEffect(() => setAll(liveProducts()), []);
 
   const rail = useRef<HTMLDivElement>(null);
   const [canL, setCanL] = useState(false);
@@ -45,9 +48,9 @@ export default function GiftFinder() {
   const r = recipients.find((x) => x.id === who)!;
   const list = useMemo(() => {
     const b = budgets.find((x) => x.id === budget)!;
-    const strict = products.filter((p) => p.for.includes(who) && b.test(p.price));
-    return (strict.length ? strict : products.filter((p) => p.for.includes(who))).slice(0, 4);
-  }, [who, budget]);
+    const strict = all.filter((p) => p.for.includes(who) && b.test(p.price));
+    return (strict.length ? strict : all.filter((p) => p.for.includes(who))).slice(0, 4);
+  }, [all, who, budget]);
 
   return (
     <div>
@@ -61,7 +64,7 @@ export default function GiftFinder() {
       >
         {recipients.map((x) => {
           const on = who === x.id;
-          const nIdeas = products.filter((p) => p.for.includes(x.id)).length;
+          const nIdeas = all.filter((p) => p.for.includes(x.id)).length;
           return (
             <button
               key={x.id}

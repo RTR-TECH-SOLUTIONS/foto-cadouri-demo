@@ -100,7 +100,7 @@ export default function Account() {
                       {new Date(o.date).toLocaleDateString('ro-RO', { day: 'numeric', month: 'long' })} · {o.items.map((i) => `${i.qty} × ${i.name}`).join(', ')}
                     </p>
                   </div>
-                  <span className="rounded-md bg-cream px-2.5 py-1 text-xs font-semibold text-accent">{o.delivery === 'ridicare' ? 'Se pregătește pentru ridicare' : 'În pregătire'}</span>
+                  <span className="rounded-md bg-cream px-2.5 py-1 text-xs font-semibold text-accent">{o.status === 'Nouă' ? (o.delivery === 'ridicare' ? 'Primită, se pregătește pentru ridicare' : 'Primită, în pregătire') : o.status === 'Finalizată' ? (o.delivery === 'ridicare' ? 'Ridicată' : 'Livrată') : o.status}</span>
                   <b className="w-28 text-right">{fmt(o.total)}</b>
                 </li>
               ))}

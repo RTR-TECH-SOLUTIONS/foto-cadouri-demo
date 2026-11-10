@@ -1,14 +1,16 @@
 import { useEffect, useState } from 'react';
-import { products } from '../data/catalog';
+import { liveProducts } from '../lib/overrides';
 import { FREE_SHIPPING, SHIPPING, addToCart, fmt, readCart, removeItem, setQty, subtotal, type CartItem } from '../lib/cart';
 
 export default function CartPage() {
   const [items, setItems] = useState<CartItem[]>([]);
   const [ready, setReady] = useState(false);
   const [wrap, setWrap] = useState(true);
+  const [all, setAll] = useState(() => liveProducts([]));
 
   useEffect(() => {
     setItems(readCart());
+    setAll(liveProducts());
     setReady(true);
     const onUpdate = (e: Event) => setItems((e as CustomEvent<CartItem[]>).detail);
     window.addEventListener('cart:update', onUpdate);
@@ -20,7 +22,7 @@ export default function CartPage() {
   const sub = subtotal(items);
   const left = FREE_SHIPPING - sub;
   const count = items.reduce((s, i) => s + i.qty, 0);
-  const suggest = products.filter((p) => !items.some((i) => i.slug === p.slug)).slice(0, 4);
+  const suggest = all.filter((p) => !items.some((i) => i.slug === p.slug)).slice(0, 4);
 
   const Suggestions = () => (
     <section className="mt-20" aria-labelledby="sug">

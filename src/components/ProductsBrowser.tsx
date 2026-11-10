@@ -4,6 +4,7 @@ import {
   type Category, type Recipient, type Material, type Occasion,
 } from '../data/catalog';
 import { addToCart, fmt } from '../lib/cart';
+import { liveProducts } from '../lib/overrides';
 
 type Sort = 'recomandate' | 'pret-asc' | 'pret-desc' | 'reducere';
 const presets = [
@@ -31,6 +32,8 @@ export default function ProductsBrowser({ initialCat, lockCat = false }: Props) 
   const [q, setQ] = useState('');
   const [sort, setSort] = useState<Sort>('recomandate');
   const [panel, setPanel] = useState(false);
+  const [all, setAll] = useState(products);
+  useEffect(() => setAll(liveProducts()), []);
 
   useEffect(() => {
     const sp = new URLSearchParams(location.search);
@@ -42,7 +45,7 @@ export default function ProductsBrowser({ initialCat, lockCat = false }: Props) 
     setQ(sp.get('q') || '');
   }, [lockCat]);
 
-  const base = useMemo(() => (lockCat && initialCat ? products.filter((p) => p.category === initialCat) : products), [lockCat, initialCat]);
+  const base = useMemo(() => (lockCat && initialCat ? all.filter((p) => p.category === initialCat) : all), [all, lockCat, initialCat]);
 
   const list = useMemo(() => {
     const lo = min ? Number(min) : 0;
